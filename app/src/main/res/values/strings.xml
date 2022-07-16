@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">NDPSongs</string>
+    <string name="song_title">SONG TITLE</string>
+    <string name="singers">SINGERS</string>
+    <string name="year">YEAR</string>
+    <string name="stars">STARS</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="_2">2</string>
+    <string name="_1">1</string>
+    <string name="insert">Insert</string>
+    <string name="show_list">Show List</string>
+    <string name="enter_song_title_here">Enter song title here</string>
+    <string name="enter_year_of_release_here">Enter year of release here</string>
+    <string name="enter_singer_s_name_s_here">Enter singer(s) name(s) here</string>
+    <string name="welcome_to_the_ndp_songs_library">Welcome to the NDP Songs library!</string>
+    <string name="show_all_songs_with_5_stars">Show all songs with 5 stars</string>
+</resources>

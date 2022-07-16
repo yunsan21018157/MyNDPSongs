@@ -1,0 +1,2 @@
+rootProject.name = "NDPSongs"
+include ':app'
