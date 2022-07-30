@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 
@@ -17,15 +19,20 @@ public class ShowSong extends AppCompatActivity {
     Button btnFiveStars;
     ListView lv;
     ArrayList<Song> al;
-    ArrayAdapter<Song> aa;
+//    ArrayAdapter<Song> aa;
+    CustomAdapter adapter;
 
     Song data;
+    Spinner spnYear;
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        btnFiveStars.performClick();  //button fivestars or showList?
+        DBHelper dbh = new DBHelper(ShowSong.this);
+        al.clear();
+        al.addAll(dbh.getAllSongs());
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -35,11 +42,13 @@ public class ShowSong extends AppCompatActivity {
 
         btnFiveStars = findViewById(R.id.btnFiveStars);
         lv = findViewById(R.id.lv);
+        spnYear = findViewById(R.id.spnYear);
+
 
         al = new ArrayList<Song>();
-        aa = new ArrayAdapter<Song>(this,
-                android.R.layout.simple_list_item_1, al);
-        lv.setAdapter(aa);
+        adapter = new CustomAdapter(this, R.layout.row, al);
+        lv.setAdapter(adapter);
+
 
         Intent i = getIntent();
         data = (Song) i.getSerializableExtra("data");
@@ -49,21 +58,39 @@ public class ShowSong extends AppCompatActivity {
             public void onClick(View v) {
                 DBHelper dbh = new DBHelper(ShowSong.this);
                 al.clear();
-                //if user enters a text in EditText and click RETRIEVE, filter result by text.
-                //BUT IF EditText is empty, retrieve everyth.
-                String filterText = data.getTitle().trim() + data.getSingers().trim() + data.getYear(); //alr IS a string so dont need toString()
-//                String filterText = data.getStars().toString();
-                if(filterText.length() == 0) {
-                    al.addAll(dbh.getAllSongs());
-                }
-                else{
-                    al.addAll(dbh.getAllSongs(filterText));
-                }
-                aa.notifyDataSetChanged();
+                al.addAll(dbh.getAll5StarSongs());
+                adapter.notifyDataSetChanged();
+
+                dbh.close();
 
             }
         });
 
+        spnYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                DBHelper dbh = new DBHelper(ShowSong.this);
+                al.clear();
+                al = dbh.getYears(data.getYear()+"");
+                adapter.notifyDataSetChanged();
+//                switch (position) {
+//                    case 0:
+//                        spnYear.setSelection(0);
+//                        break;
+//
+//                    case 1:
+//                        break;
+//
+//                    case 2:
+//                        break;
+//                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

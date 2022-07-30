@@ -16,4 +16,10 @@
     <string name="enter_singer_s_name_s_here">Enter singer(s) name(s) here</string>
     <string name="welcome_to_the_ndp_songs_library">Welcome to the NDP Songs library!</string>
     <string name="show_all_songs_with_5_stars">Show all songs with 5 stars</string>
+
+    <string-array name="spinnerItems">
+        <item>1998</item>
+        <item>2015</item>
+        <item>2002</item>
+    </string-array>
 </resources>

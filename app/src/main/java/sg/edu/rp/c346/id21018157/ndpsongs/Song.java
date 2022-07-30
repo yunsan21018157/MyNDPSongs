@@ -9,7 +9,8 @@ public class Song implements Serializable {
     private int year;
     private int stars;
 
-    public Song(String title, String singers, int year, int stars) {
+    public Song(int id, String title, String singers, int year, int stars) {
+        _id = id;
         this.title = title;
         this.singers = singers;
         this.year = year;
@@ -55,6 +56,6 @@ public class Song implements Serializable {
     }
 
     @Override
-    public String toString() { return "ID:" + _id + ", " + title + ", " + singers + ", " + year + ", " + stars;  }
+    public String toString() { return title + "\n" + singers + " - " + year + "\n" + stars;  }
 
 }

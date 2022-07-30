@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     RadioButton rb1, rb2, rb3, rb4, rb5;
     Button btnInsert, btnShowList;
 
+    Song data;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,69 +51,60 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<Song> aa;
 
         al = new ArrayList<Song>();
-        aa = new ArrayAdapter<Song>(this,
+        //changed for CA
+        aa = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, al);
-//        lv.setAdapter(aa);
 
 
+        Intent i = getIntent();
+        data = (Song) i.getSerializableExtra("data");
+
+
+        btnShowList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Song target = al.get(0);
+                Intent i = new Intent(MainActivity.this,
+                        ShowSong.class);
+//                i.putExtra("data", target);
+                startActivity(i);
+            }
+        });
 
         btnInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String stars = "";
+                int stars = 1;
                 int checkedRadioId = rgStars.getCheckedRadioButtonId();
                 if (checkedRadioId == R.id.rb1) {
-                    stars = "1";
-                }
-                else if (checkedRadioId == R.id.rb2){
-                    stars = "2";
-                }
-                else if (checkedRadioId == R.id.rb3){
-                    stars = "3";
-                }
-                else if (checkedRadioId == R.id.rb4) {
-                    stars = "4";
-                }
-                else if (checkedRadioId == R.id.rb5) {
-                    stars = "5";
+                    stars = 1;
+                } else if (checkedRadioId == R.id.rb2) {
+                    stars = 2;
+                } else if (checkedRadioId == R.id.rb3) {
+                    stars = 3;
+                } else if (checkedRadioId == R.id.rb4) {
+                    stars = 4;
+                } else if (checkedRadioId == R.id.rb5) {
+                    stars = 5;
                 }
 
-                String data = etTitle.getText().toString() + etSingers.getText().toString() + etYear.getText().toString() + stars;
+
+                String title = etTitle.getText().toString();
+                String singers = etSingers.getText().toString();
+                int year = Integer.parseInt(etYear.getText().toString());
+
 
                 DBHelper dbh = new DBHelper(MainActivity.this);
-                long inserted_id = dbh.insertSong(data);
+                long inserted_id = dbh.insertSong(title, singers, year, stars);
 
-                if (inserted_id != -1){
+                if (inserted_id != -1) {
                     al.clear();
                     al.addAll(dbh.getAllSongs()); //to add the songs retrieved from the database using dbh.getAllSongs() into the arraylist.
                     aa.notifyDataSetChanged();
-                    Toast.makeText(MainActivity.this, "Insert successful",
-                            Toast.LENGTH_SHORT).show();
+
                 }
-            }
-        });
-
-        btnShowList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DBHelper dbh = new DBHelper(MainActivity.this);
-                al.clear();
-                al.addAll(dbh.getAllSongs());
-                aa.notifyDataSetChanged();
-
-                int checkedRadioId = rgStars.getCheckedRadioButtonId();
-                if (checkedRadioId == R.id.rb5) {
-                    al.addAll(dbh.getAllSongs());
-                }
-                aa.notifyDataSetChanged();
-
-
-                Song target = al.get(0);
-                Intent i = new Intent(MainActivity.this,
-                        ShowSong.class);
-                i.putExtra("data", target);
-                startActivity(i);
+                Toast.makeText(MainActivity.this, "Insert successful", Toast.LENGTH_SHORT).show();
             }
         });
 
